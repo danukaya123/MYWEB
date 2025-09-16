@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Supabase Auth with Google</title>
+    <title>MongoDB Auth with Google</title>
     <style>
         * {
             margin: 0;
@@ -262,7 +262,7 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1>Supabase Auth with Google</h1>
+            <h1>MongoDB Auth with Google</h1>
             <p>Sign in or create an account to continue</p>
         </div>
         
@@ -290,7 +290,7 @@
                     <div class="divider"><span>or</span></div>
                     
                     <button type="button" class="google-btn" id="googleSignIn">
-                        <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTgiIGhlaWdodD0iMTgiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGcgZmlsbD0ibm9uZSIgZmlsbC1ydWxlPSJldmVub2RkIj48cGF0aCBkPSJNMTcuNiA5LjJsLS4xLTEuOEg5djMuNGg0LjhDMTMuNiAxMiAxMyAxMyAxMiAxMy42djIuMmgzYTguOCA4LjggMCAwIDAgMi42LTYuNnoiIGZpbGw9IiM0Mjg1RjQiIGZpbGwtcnVsZT0ibm9uemVybyIvPjxwYXRoIGQ9Ik05IDE4YzIuNCAwIDQuNS0uOCA2LTIuMmwtMy0yLjJhNS40IDUuNCAwIDAgMS04LTIuOUgxVjEzYTkgOSAwIDAgMCA4IDV6IiBmaWxsPSIjMzRBODUzIiBmaWxsLXJ1bGU9Im5vbnplcm8iLz48cGF0aCBkPSJNNCAxMC43YTUuNCA1LjQgMCAwIDEgMC0zLjRWNUgxYTkgOSAwIDAgMCAwIDhsMy0yLjN6IiBmaWxsPSIjRkJCQzA1IiBmaWxsLXJ1bGU9Im5vbnplcm8iLz48cGF0aCBkPSJNOSAzLjZjMS4zIDAgMi41LjQgMy40IDEuM0wxNSAyLjNBOSA5IDAgMCAwIDEgNWwzIDIuNGE1LjQgNS40IDAgMCAxIDUtMy43eiIgZmlsbD0iI0VBNDMzNSIgZmlsbLXJ1bGU9Im5vbnplcm8iLz48cGF0aCBkPSJNMTcuNiA5LjJsLS4xLTEuOEg5djMuNGg0LjhDMTMuNiAxMiAxMyAxMyAxMiAxMy42djIuMmgzYTguOCA4LjggMCAwIDAgMi42LTYuNnoiIGZpbGw9IiM0Mjg1RjQiIGZpbGwtcnVsZT0ibm9uemVybyIvPjxwYXRoIGQ9Ik05IDE4YzIuNCAwIDQuNS0uOCA2LTIuMmwtMy0yLjJhNS40IDUuNCAwIDAgMS04LTIuOUgxVjEzYTkgOSAwIDAgMCA4IDV6IiBmaWxsPSIjMzRBODUzIiBmaWxsLXJ1bGU9Im5vbnplcm8iLz48cGF0aCBkPSJNNCAxMC43YTUuNCA1LjQgMCAwIDEgMC0zLjRWNUgxYTkgOSAwIDAgMCAwIDhsMy0yLjN6IiBmaWxsPSIjRkJCQzA1IiBmaWxsLXJ1bGU9Im5vbnplcm8iLz48cGF0aCBkPSJNOSAzLjZjMS4zIDAgMi41LjQgMy40IDEuM0wxNSAyLjNBOSA5IDAgMCAwIDEgNWwzIDIuNGE1LjQgNS40IDAgMCAxIDUtMy43eiIgZmlsbD0iI0VBNDMzNSIgZmlsbLXJ1bGU9Im5vbnplcm8iLz48cGF0aCBkPSJNMTcuNiA5LjJsLS4xLTEuOEg5djMuNGg0LjhDMTMuNiAxMiAxMyAxMyAxMiAxNS42djIuMmgzYTguOCA4LjggMCAwIDAgMi42LTYuNnoiIGZpbGw9IiM0Mjg1RjQiIGZpbGwtcnVsZT0ibm9uemVybyIvPjxwYXRoIGQ9Ik05IDE4YzIuNCAwIDQuNS0uOCA2LTIuMmwtMy0yLjJhNS40IDUuNCAwIDAgMS04LTIuOUgxVjEzYTkgOSAwIDAgMCA4IDV6IiBmaWxsPSIjMzRBODUzIiBmaWxsLXJ1bGU9Im5vbnplcm8iLz48cGF0aCBkPSJNNCAxMC43YTUuNCA1LjQgMCAwIDEgMC0zLjRWNUgxYTkgOSAwIDAgMCAwIDhsMy0yLjN6IiBmaWxsPSIjRkJCQzA1IiBmaWxsLXJ1bGU9Im5vbnplcm8iLz48cGF0aCBkPSJNOSAzLjZjMS4zIDAgMi41LjQgMy40IDEuM0wxNSAyLjNBOSA5IDAgMCAwIDEgNWwzIDIuNGE1LjQgNS40IDAgMCAxIDUtMy43eiIgZmlsbD0iI0VBNDMzNSIgZmlsbLXJ1bGU9Im5vbnplcm8iLz48cGF0aCBkPSJNMTcuNiA5LjJsLS4xLTEuOEg5djMuNGg0LjhDMTMuNiAxMiAxMyAxMyAxMiAxMy42djIuMmgzYTguOCA4LjggMCAwIDAgMi42LTYuNnoiIGZpbGw9IiM0Mjg1RjQiIGZpbGwtcnVsZT0ibm9uemVybyIvPjxwYXRoIGQ9Ik05IDE4YzIuNCAwIDQuNS0uOCA2LTIuMmwtMy0yLjJhNS40IDUuNCAwIDAgMS04LTIuOUgxVjEzYTkgOSAwIDAgMCA4IDV6IiBmaWxsPSIjMzRBODUzIiBmaWxsLXJ1bGU9bm9uemVybyIvPjwvZz48L3N2Zz4=" alt="Google Logo">
+                        <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTgiIGhlaWdodD0iMTgiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGcgZmlsbD0ibm9uZSIgZmlsbC1ydWxlPSJldmVub2RkIj48cGF0aCBkPSJNMTcuNiA5LjJsLS4xLTEuOEg5djMuNGg0LjhDMTMuNiAxMiAxMyAxMyAxMiAxMy42djIuMmgzYTguOCA4LjggMCAwIDAgMi42LTYuNnoiIGZpbGw9IiM0Mjg1RjQiIGZpbGwtcnVsZT0ibm9uemVybyIvPjxwYXRoIGQ9Ik05IDE4YzIuNCAwIDQuNS0uOCA2LTIuMmwtMy0yLjJhNS40IDUuNCAwIDAgMS04LTIuOUgxVjEzYTkgOSAwIDAgMCA4IDV6IiBmaWxsPSIjMzRBODUzIiBmaWxsLXJ1bGU9Im5vbnplcm8iLz48cGF0aCBkPSJNNCAxMC43YTUuNCA1LjQgMCAwIDEgMC0zLjRWNUgxYTkgOSAwIDAgMCAwIDhsMy0yLjN6IiBmaWxsPSIjRkJCQzA1IiBmaWxsLXJ1bGU9Im5vbnplcm8iLz48cGF0aCBkPSJNOSAzLjZjMS4zIDAgMi41LjQgMy40IDEuM0wxNSAyLjNBOSA5IDAgMCAwIDEgNWwzIDIuNGE1LjQgNS40IDAgMCAxIDUtMy43eiIgZmlsbD0iI0VBNDMzNSIgZpbGwtcnVsZT0ibm9uemVybyIvPjxwYXRoIGQ9Ik05IDE4YzIuNCAwIDQuNS0uOCA2LTIuMmwtMy0yLjJhNS40IDUuNCAwIDAgMS04LTIuOUgxVjEzYTkgOSAwIDAgMCA4IDV6IiBmaWxsPSIjMzRBODUzIiBmaWxsLXJ1bGU9Im5vbnplcm8iLz48cGF0aCBkPSJNNCAxMC43YTUuNCA1LjQgMCAwIDEgMC0zLjRWNUgxYTkgOSAwIDAgMCAwIDhsMy0yLjN6IiBmaWxsPSIjRkJCQzA1IiBmaWxsLXJ1bGU9Im5vbnplcm8iLz48cGF0aCBkPSJNOSAzLjZjMS4zIDAgMi41LjQgMy40IDEuM0wxNSAyLjNBOSA5IDAgMCAwIDEgNWwzIDIuNGE1LjQgNS40IDAgMCAxIDUtMy43eiIgZmlsbD0iI0VBNDMzNSIgZmlsbLXJ1bGU9Im5vbnplcm8iLz48L2c+PC9zdmc+" alt="Google Logo">
                         Sign in with Google
                     </button>
                 </form>
@@ -318,7 +318,7 @@
                     <div class="divider"><span>or</span></div>
                     
                     <button type="button" class="google-btn" id="googleSignUp">
-                        <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTgiIGhlaWdodD0iMTgiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGcgZmlsbD0ibm9uZSIgZmlsbC1ydWxlPSJldmVub2RkIj48cGF0aCBkPSJNMTcuNiA5LjJsLS4xLTEuOEg5djMuNGg0LjhDMTMuNiAxMiAxMyAxMyAxMiAxMy42djIuMmgzYTguOCA4LjggMCAwIDAgMi42LTYuNnoiIGZpbGw9IiM0Mjg1RjQiIGZpbGwtcnVsZT0ibm9uemVybyIvPjxwYXRoIGQ9Ik05IDE4YzIuNCAwIDQuNS0uOCA2LTIuMmwtMy0yLjJhNS40IDUuNCAwIDAgMS04LTIuOUgxVjEzYTkgOSAwIDAgMCA4IDV6IiBmaWxsPSIjMzRBODUzIiBmaWxsLXJ1bGU9Im5vbnplcm8iLz48cGF0aCBkPSJNNCAxMC43YTUuNCA1LjQgMCAwIDEgMC0zLjRWNUgxYTkgOSAwIDAgMCAwIDhsMy0yLjN6IiBmaWxsPSIjRkJCQzA1IiBmaWxsLXJ1bGU9Im5vbnplcm8iLz48cGF0aCBkPSJNOSAzLjZjMS4zIDAgMi41LjQgMy40IDEuM0wxNSAyLjNBOSA5IDAgMCAwIDEgNWwzIDIuNGE1LjQgNS40IDAgMCAxIDUtMy43eiIgZmlsbD0iI0VBNDMzNSIgZmlsbLXJ1bGU9Im5vbnplcm8iLz48cGF0aCBkPSJNMTcuNiA5LjJsLS4xLTEuOEg5djMuNGg0LjhDMTMuNiAxMiAxMyAxMyAxMiAxMy42djIuMmgzYTguOCA4LjggMCAwIDAgMi42LTYuNnoiIGZpbGw9IiM0Mjg1RjQiIGZpbGwtcnVsZT0ibm9uemVybyIvPjxwYXRoIGQ9Ik05IDE4YzIuNCAwIDQuNS0uOCA6LTIuMmwtMy0yLjJhNS40IDUuNCAwIDAgMS04LTIuOUgxVjEzYTkgOSAwIDAgMCA4IDV6IiBmaWxsPSIjMzRBODUzIiBmaWxsLXJ1bGU9Im5vbnplcm8iLz48cGF0aCBkPSJNNCAxMC43YTUuNCA1LjQgMCAwIDEgMC0zLjRWNUgxYTkgOSAwIDAgMCAwIDhsMy0yLjN6IiBmaWxsPSIjRkJCQzA1IiBmaWxsLXJ1bGU9Im5vbnplcm8iLz48cGF0aCBkPSJNOSAzLjZjMS4zIDAgMi41LjQgMy40IDEuM0wxNSAyLjNBOSA5IDAgMCAwIDEgNWwzIDIuNGE1LjQgNS40IDAgMCAxIDUtMy43eiIgZmlsbD0iI0VBNDMzNSIgZmlsbLXJ1bGU9Im5vbnplcm8iLz48cGF0aCBkPSJNMTcuNiA5LjJsLS4xLTEuOEg5djMuNGg0LjhDMTMuNiAxMiAxMyAxMyAxMiAxMy42djIuMmgzYTguOCA4LjggMCAwIDAgMi42LTYuNnoiIGZpbGw9IiM0Mjg1RjQiIGZpbGwtcnVsZT0ibm9uemVybyIvPjxwYXRoIGQ9Ik05IDE4YzIuNCAwIDQuNS0uOCA2LTIuMmwtMy0yLjJhNS40IDUuNCAwIDAgMS04LTIuOUgxVjEzYTkgOSAwIDAgMCA4IDV6IiBmaWxsPSIjMzRBODUzIiBmaWxsLXJ1bGU9Im5vbnplcm8iLz48cGF0aCBkPSJNNCAxMC43YTUuNCA1LjQgMCAwIDEgMC0zLjRWNUgxYTkgOSAwIDAgMCAwIDhsMy0yLjN6IiBmaWxsPSIjRkJCQzA1IiBmaWxsLXJ1bGU9Im5vbnplcm8iLz48cGF0aCBkPSJNOSAzLjZjMS4zIDAgMi41LjQgMy40IDEuM0wxNSAyLjNBOSA5IDAgMCAwIDEgNWwzIDIuNGE1LjQgNS40IDQgMCAxIDUtMy43eiIgZmlsbD0iI0VBNDMzNSIgZmlsbLXJ1bGU9Im5vbnplcm8iLz48L2c+PC9zdmc+" alt="Google Logo">
+                        <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTgiIGhlaWdodD0iMTgiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGcgZmlsbD0ibm9uZSIgZmlsbC1ydWxlPSJldmVub2RkIj48cGF0aCBkPSJNMTcuNiA5LjJsLS4xLTEuOEg5djMuNGg0LjhDMTMuNiAxMiAxMyAxMyAxMiAxMy42djIuMmgzYTguOCA4LjggMCAwIDAgMi42LTYuNnoiIGZpbGw9IiM0Mjg1RjQiIGZpbGwtcnVsZT0ibm9uemVybyIvPjxwYXRoIGQ9Ik05IDE4YzIuNCAwIDQuNS0uOCA2LTIuMmwtMy0yLjJhNS40IDUuNCAwIDAgMS04LTIuOUgxVjEzYTkgOSAwIDAgMCA4IDV6IiBmaWxsPSIjMzRBODUzIiBmaWxsLXJ1bGU9Im5vbnplcm8iLz48cGF0aCBkPSJNNCAxMC43YTUuNCA1LjQgMCAwIDEgMC0zLjRWNUgxYTkgOSAwIDAgMCAwIDhsMy0yLjN6IiBmaWxsPSIjRkJCQzA1IiBmaWxsLXJ1bGU9Im5vbnplcm8iLz48cGF0aCBkPSJNOSAzLjZjMS4zIDAgMi41LjQgMy40IDEuM0wxNSAyLjNBOSA5IDAgMCAwIDEgNWwzIDIuNGE1LjQgNS40IDAgMCAxIDUtMy43eiIgZmlsbD0iI0VBNDMzNSIgZmlsbLXJ1bGU9Im5vbnplcm8iLz48cGF0aCBkPSJNMTcuNiA5LjJsLS4xLTEuOEg5djMuNGg0LjhDMTMuNiAxMiAxMyAxMyAxMiAxMy42djIuMmgzYTguOCA4LjggMCAwIDAgMi42LTYuNnoiIGZpbGw9IiM0Mjg1RjQiIGZpbGwtcnVsZT0ibm9uemVybyIvPjxwYXRoIGQ9Ik05IDE4YzIuNCAwIDQuNS0uOCA2LTIuMmwtMy0yLjJhNS40IDUuNCAwIDAgMS04LTIuOUgxVjEzYTkgOSAwIDAgMCA4IDV6IiBmaWxsPSIjMzRBODUzIiBmaWxsLXJ1bGU9Im5vbnplcm8iLz48cGF0aCBkPSJNNCAxMC43YTUuNCA1LjQgMCAwIDEgMC0zLjRWNUgxYTkgOSAwIDAgMCAwIDhsMy0yLjN6IiBmaWxsPSIjRkJCQzA1IiBmaWxsLXJ1bGU9Im5vbnplcm8iLz48cGF0aCBkPSJNOSAzLjZjMS4zIDAgMi41LjQgMy40IDEuM0wxNSAyLjNBOSA5IDAgMCAwIDEgNWwzIDIuNGE1LjQgNS40IDAgMCAxIDUtMy43eiIgZmlsbD0iI0VBNDMzNSIgZpbGwtcnVsZT0ibm9uemVybyIvPjwvZz48L3N2Zz4=" alt="Google Logo">
                         Sign up with Google
                     </button>
                 </form>
@@ -332,52 +332,26 @@
             </div>
             
             <div class="instructions">
-                <h3>Supabase Setup Instructions:</h3>
+                <h3>MongoDB + Google Auth Setup Instructions:</h3>
                 <ol>
-                    <li>Go to <a href="https://supabase.com/" target="_blank">Supabase</a> and create an account</li>
-                    <li>Create a new project and wait for it to initialize</li>
-                    <li>Go to Authentication → Settings → Google and enable Google Auth</li>
-                    <li>Add your Google OAuth Client ID and Secret</li>
-                    <li>Add your site URL to Redirect URLs</li>
-                    <li>Go to SQL Editor and run this SQL to create a profiles table:
-                        <pre>
-CREATE TABLE profiles (
-  id UUID REFERENCES auth.users(id) PRIMARY KEY,
-  email TEXT,
-  name TEXT,
-  avatar_url TEXT,
-  updated_at TIMESTAMP WITH TIME ZONE
-);
-
-CREATE OR REPLACE FUNCTION public.handle_new_user()
-RETURNS TRIGGER AS $$
-BEGIN
-  INSERT INTO public.profiles (id, email, name, avatar_url)
-  VALUES (new.id, new.email, new.raw_user_meta_data->>'full_name', new.raw_user_meta_data->>'avatar_url');
-  RETURN new;
-END;
-$$ LANGUAGE plpgsql SECURITY DEFINER;
-
-CREATE OR REPLACE TRIGGER on_auth_user_created
-  AFTER INSERT ON auth.users
-  FOR EACH ROW EXECUTE FUNCTION public.handle_new_user();
-                        </pre>
-                    </li>
-                    <li>Replace the Supabase URL and Key in the JavaScript code below</li>
+                    <li>Create a MongoDB Atlas account at <a href="https://www.mongodb.com/atlas" target="_blank">mongodb.com/atlas</a></li>
+                    <li>Set up a new cluster and database</li>
+                    <li>Create a Google OAuth app at <a href="https://console.developers.google.com/" target="_blank">Google Cloud Console</a></li>
+                    <li>Add your domain to authorized JavaScript origins</li>
+                    <li>Create a serverless function (e.g., using Netlify Functions or Vercel) to handle the MongoDB authentication</li>
+                    <li>Replace the API endpoints in the JavaScript code with your serverless function URLs</li>
                 </ol>
             </div>
         </div>
     </div>
 
-    <!-- Include Supabase JS -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <!-- Google API for authentication -->
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
     
     <script>
-        // Initialize Supabase
-        // REPLACE THESE WITH YOUR OWN VALUES FROM SUPABASE
-        const supabaseUrl = 'https://xfghwzgszjvdejeknkwe.supabase.co';
-        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhmZ2h3emdzemp2ZGVqZWtua3dlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTgwMjExNDAsImV4cCI6MjA3MzU5NzE0MH0.QfOx_NY3zilkoLcKdCQNHJv_VMDgHz2ML2gvmKO1Ets';
-        const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+        // Configuration - Replace these with your own values
+        const MONGODB_API_URL = 'mongodb+srv://educatelux1_db_user:<danuka$123>@cluster0.65a0ati.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0'; // Your backend API endpoint
+        const GOOGLE_CLIENT_ID = '1004518811131-lb3p9o3pqn0sii0ullt8gn7o4567fpun.apps.googleusercontent.com'; // Your Google OAuth Client ID
         
         // DOM Elements
         const loginForm = document.getElementById('loginForm');
@@ -392,8 +366,16 @@ CREATE OR REPLACE TRIGGER on_auth_user_created
         const userImage = document.getElementById('userImage');
         const logoutBtn = document.getElementById('logoutBtn');
         
-        // Check if user is already logged in
-        checkUser();
+        // Initialize Google Sign-In
+        window.onload = function () {
+            google.accounts.id.initialize({
+                client_id: GOOGLE_CLIENT_ID,
+                callback: handleGoogleSignIn
+            });
+            
+            // Check if user is already logged in
+            checkUser();
+        };
         
         // Toggle between forms
         loginTab.addEventListener('click', () => {
@@ -428,15 +410,27 @@ CREATE OR REPLACE TRIGGER on_auth_user_created
             const password = document.getElementById('loginPassword').value;
             
             try {
-                const { data, error } = await supabase.auth.signInWithPassword({
-                    email,
-                    password
+                // This would call your backend API to authenticate with MongoDB
+                const response = await fetch(`${MONGODB_API_URL}/login`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ email, password })
                 });
                 
-                if (error) throw error;
+                const data = await response.json();
                 
-                showMessage('Successfully signed in!', 'success');
-                checkUser();
+                if (response.ok) {
+                    // Store the token in localStorage
+                    localStorage.setItem('authToken', data.token);
+                    localStorage.setItem('user', JSON.stringify(data.user));
+                    
+                    showMessage('Successfully signed in!', 'success');
+                    checkUser();
+                } else {
+                    throw new Error(data.message || 'Login failed');
+                }
             } catch (error) {
                 showMessage(error.message, 'error');
             }
@@ -455,106 +449,104 @@ CREATE OR REPLACE TRIGGER on_auth_user_created
             }
             
             try {
-                const { data, error } = await supabase.auth.signUp({
-                    email,
-                    password,
-                    options: {
-                        data: {
-                            name: name,
-                        }
-                    }
+                // This would call your backend API to create a user in MongoDB
+                const response = await fetch(`${MONGODB_API_URL}/signup`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ name, email, password })
                 });
                 
-                if (error) throw error;
+                const data = await response.json();
                 
-                showMessage('Signup successful! Please check your email for confirmation.', 'success');
+                if (response.ok) {
+                    showMessage('Signup successful! You can now log in.', 'success');
+                    // Switch to login tab
+                    loginTab.click();
+                } else {
+                    throw new Error(data.message || 'Signup failed');
+                }
             } catch (error) {
                 showMessage(error.message, 'error');
             }
         });
         
-        // Google Sign In/Sign Up
-        async function handleGoogleAuth() {
-            try {
-                const { data, error } = await supabase.auth.signInWithOAuth({
-                    provider: 'google',
-                    options: {
-                        redirectTo: window.location.origin
-                    }
-                });
-                
-                if (error) throw error;
-            } catch (error) {
-                showMessage(error.message, 'error');
-            }
+        // Google Sign In handler
+        function handleGoogleSignIn(response) {
+            // This would be sent to your backend for verification and MongoDB storage
+            const { credential } = response;
+            
+            // Decode the JWT token to get user info (for demo purposes only)
+            // In a real app, you would send this to your backend for verification
+            const payload = JSON.parse(atob(credential.split('.')[1]));
+            
+            // For demo purposes, we'll just store the user info in localStorage
+            const user = {
+                id: payload.sub,
+                name: payload.name,
+                email: payload.email,
+                picture: payload.picture
+            };
+            
+            localStorage.setItem('authToken', credential);
+            localStorage.setItem('user', JSON.stringify(user));
+            
+            showMessage('Successfully signed in with Google!', 'success');
+            checkUser();
+        }
+        
+        // Google Sign In/Sign Up buttons
+        function handleGoogleAuth() {
+            google.accounts.id.prompt();
         }
         
         // Check user function
-        async function checkUser() {
-            const { data: { session } } = await supabase.auth.getSession();
+        function checkUser() {
+            const user = JSON.parse(localStorage.getItem('user') || 'null');
+            const token = localStorage.getItem('authToken');
             
-            if (session?.user) {
-                // Get user profile
-                const { data: profile, error } = await supabase
-                    .from('profiles')
-                    .select('*')
-                    .eq('id', session.user.id)
-                    .single();
+            if (user && token) {
+                // Show user info
+                userName.textContent = user.name || user.email;
+                userEmail.textContent = user.email;
                 
-                if (profile) {
-                    // Show user info
-                    userName.textContent = profile.name || session.user.email;
-                    userEmail.textContent = session.user.email;
-                    
-                    // Try to get avatar from Google
-                    if (session.user.app_metadata.provider === 'google') {
-                        userImage.src = session.user.user_metadata.avatar_url || '';
-                    } else {
-                        userImage.style.display = 'none';
-                    }
-                    
-                    // Switch to user info view
-                    loginSection.style.display = 'none';
-                    userInfo.style.display = 'block';
+                if (user.picture) {
+                    userImage.src = user.picture;
+                } else {
+                    userImage.style.display = 'none';
                 }
+                
+                // Switch to user info view
+                loginSection.style.display = 'none';
+                userInfo.style.display = 'block';
             }
         }
         
         // Logout handler
-        logoutBtn.addEventListener('click', async () => {
-            try {
-                const { error } = await supabase.auth.signOut();
-                if (error) throw error;
-                
-                // Clear user data
-                userName.textContent = '';
-                userEmail.textContent = '';
-                userImage.src = '';
-                
-                // Switch back to login view
-                userInfo.style.display = 'none';
-                loginSection.style.display = 'block';
-                
-                showMessage('You have been logged out.', 'info');
-            } catch (error) {
-                showMessage(error.message, 'error');
-            }
+        logoutBtn.addEventListener('click', () => {
+            // Clear user data
+            localStorage.removeItem('authToken');
+            localStorage.removeItem('user');
+            
+            // Clear user info display
+            userName.textContent = '';
+            userEmail.textContent = '';
+            userImage.src = '';
+            
+            // Switch back to login view
+            userInfo.style.display = 'none';
+            loginSection.style.display = 'block';
+            
+            showMessage('You have been logged out.', 'info');
         });
         
         // Add event listeners for Google buttons
         document.getElementById('googleSignIn').addEventListener('click', handleGoogleAuth);
         document.getElementById('googleSignUp').addEventListener('click', handleGoogleAuth);
         
-        // Listen for auth state changes
-        supabase.auth.onAuthStateChange((event, session) => {
-            if (event === 'SIGNED_IN') {
-                checkUser();
-                showMessage('Successfully signed in!', 'success');
-            }
-        });
-        
         // Show instructions message
-        showMessage('Remember to configure Supabase with your Google OAuth credentials', 'info');
+        showMessage('Remember to configure your MongoDB backend and Google OAuth credentials', 'info');
     </script>
 </body>
 </html>
