@@ -3,7 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Supabase Auth with Google</title>
+    <title>Firebase Auth with Google</title>
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
     <style>
         * {
             margin: 0;
@@ -262,7 +265,7 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1>Supabase Auth with Google</h1>
+            <h1>Firebase Auth with Google</h1>
             <p>Sign in or create an account to continue</p>
         </div>
         
@@ -290,7 +293,7 @@
                     <div class="divider"><span>or</span></div>
                     
                     <button type="button" class="google-btn" id="googleSignIn">
-                        <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTgiIGhlaWdodD0iMTgiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGcgZmlsbD0ibm9uZSIgZmlsbC1ydWxlPSJldmVub2RkIj48cGF0aCBkPSJNMTcuNiA5LjJsLS4xLTEuOEg5djMuNGg0LjhDMTMuNiAxMiAxMyAxMyAxMiAxMy42djIuMmgzYTguOCA4LjggMCAwIDAgMi42LTYuNnoiIGZpbGw9IiM0Mjg1RjQiIGZpbGwtcnVsZT0ibm9uemVybyIvPjxwYXRoIGQ9Ik05IDE4YzIuNCAwIDQuNS0uOCA2LTIuMmwtMy0yLjJhNS40IDUuNCAwIDAgMS04LTIuOUgxVjEzYTkgOSAwIDAgMCA4IDV6IiBmaWxsPSIjMzRBODUzIiBmaWxsLXJ1bGU9Im5vbnplcm8iLz48cGF0aCBkPSJNNCAxMC43YTUuNCA1LjQgMCAwIDEgMC0zLjRWNUgxYTkgOSAwIDAgMCAwIDhsMy0yLjN6IiBmaWxsPSIjRkJCQzA1IiBmaWxsLXJ1bGU9Im5vbnplcm8iLz48cGF0aCBkPSJNOSAzLjZjMS4zIDAgMi41LjQgMy40IDEuM0wxNSAyLjNBOSA5IDAgMCAwIDEgNWwzIDIuNGE1LjQgNS40IDAgMCAxIDUtMy43eiIgZmlsbD0iI0VBNDMzNSIgZmlsbLXJ1bGU9Im5vbnplcm8iLz48cGF0aCBkPSJNMTcuNiA5LjJsLS4xLTEuOEg5djMuNGg0LjhDMTMuNiAxMiAxMyAxMyAxMiAxMy42djIuMmgzYTguOCA4LjggMCAwIDAgMi42LTYuNnoiIGZpbGw9IiM0Mjg1RjQiIGZpbGwtcnVsZT0ibm9uemVybyIvPjxwYXRoIGQ9Ik05IDE4YzIuNCAwIDQuNS0uOCA2LTIuMmwtMy0yLjJhNS40IDUuNCAwIDAgMS04LTIuOUgxVjEzYTkgOSAwIDAgMCA4IDV6IiBmaWxsPSIjMzRBODUzIiBmaWxsLXJ1bGU9Im5vbnplcm8iLz48cGF0aCBkPSJNNCAxMC43YTUuNCA1LjQgMCAwIDEgMC0zLjRWNUgxYTkgOSAwIDAgMCAwIDhsMy0yLjN6IiBmaWxsPSIjRkJCQzA1IiBmaWxsLXJ1bGU9Im5vbnplcm8iLz48cGF0aCBkPSJNOSAzLjZjMS4zIDAgMi41LjQgMy40IDEuM0wxNSAyLjNBOSA5IDAgMCAwIDEgNWwzIDIuNGE1LjQgNS40IDAgMCAxIDUtMy43eiIgZmlsbD0iI0VBNDMzNSIgZmlsbLXJ1bGU9Im5vbnplcm8iLz48cGF0aCBkPSJNMTcuNiA5LjJsLS4xLTEuOEg5djMuNGg0LjhDMTMuNiAxMiAxMyAxMyAxMiAxNS42djIuMmgzYTguOCA4LjggMCAwIDAgMi42LTYuNnoiIGZpbGw9IiM0Mjg1RjQiIGZpbGwtcnVsZT0ibm9uemVybyIvPjxwYXRoIGQ9Ik05IDE4YzIuNCAwIDQuNS0uOCA2LTIuMmwtMy0yLjJhNS40IDUuNCAwIDAgMS04LTIuOUgxVjEzYTkgOSAwIDAgMCA4IDV6IiBmaWxsPSIjMzRBODUzIiBmaWxsLXJ1bGU9Im5vbnplcm8iLz48cGF0aCBkPSJNNCAxMC43YTUuNCA1LjQgMCAwIDEgMC0zLjRWNUgxYTkgOSAwIDAgMCAwIDhsMy0yLjN6IiBmaWxsPSIjRkJCQzA1IiBmaWxsLXJ1bGU9Im5vbnplcm8iLz48cGF0aCBkPSJNOSAzLjZjMS4zIDAgMi41LjQgMy40IDEuM0wxNSAyLjNBOSA5IDAgMCAwIDEgNWwzIDIuNGE1LjQgNS40IDAgMCAxIDUtMy43eiIgZmlsbD0iI0VBNDMzNSIgZmlsbLXJ1bGU9Im5vbnplcm8iLz48cGF0aCBkPSJNMTcuNiA5LjJsLS4xLTEuOEg5djMuNGg0LjhDMTMuNiAxMiAxMyAxMyAxMiAxMy42djIuMmgzYTguOCA4LjggMCAwIDAgMi42LTYuNnoiIGZpbGw9IiM0Mjg1RjQiIGZpbGwtcnVsZT0ibm9uemVybyIvPjxwYXRoIGQ9Ik05IDE4YzIuNCAwIDQuNS0uOCA2LTIuMmwtMy0yLjJhNS40IDUuNCAwIDAgMS04LTIuOUgxVjEzYTkgOSAwIDAgMCA4IDV6IiBmaWxsPSIjMzRBODUzIiBmaWxsLXJ1bGU9bm9uemVybyIvPjwvZz48L3N2Zz4=" alt="Google Logo">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg" alt="Google Logo">
                         Sign in with Google
                     </button>
                 </form>
@@ -318,7 +321,7 @@
                     <div class="divider"><span>or</span></div>
                     
                     <button type="button" class="google-btn" id="googleSignUp">
-                        <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTgiIGhlaWdodD0iMTgiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGcgZmlsbD0ibm9uZSIgZmlsbC1ydWxlPSJldmVub2RkIj48cGF0aCBkPSJNMTcuNiA5LjJsLS4xLTEuOEg5djMuNGg0LjhDMTMuNiAxMiAxMyAxMyAxMiAxMy42djIuMmgzYTguOCA4LjggMCAwIDAgMi42LTYuNnoiIGZpbGw9IiM0Mjg1RjQiIGZpbGwtcnVsZT0ibm9uemVybyIvPjxwYXRoIGQ9Ik05IDE4YzIuNCAwIDQuNS0uOCA2LTIuMmwtMy0yLjJhNS40IDUuNCAwIDAgMS04LTIuOUgxVjEzYTkgOSAwIDAgMCA4IDV6IiBmaWxsPSIjMzRBODUzIiBmaWxsLXJ1bGU9Im5vbnplcm8iLz48cGF0aCBkPSJNNCAxMC43YTUuNCA1LjQgMCAwIDEgMC0zLjRWNUgxYTkgOSAwIDAgMCAwIDhsMy0yLjN6IiBmaWxsPSIjRkJCQzA1IiBmaWxsLXJ1bGU9Im5vbnplcm8iLz48cGF0aCBkPSJNOSAzLjZjMS4zIDAgMi41LjQgMy40IDEuM0wxNSAyLjNBOSA5IDAgMCAwIDEgNWwzIDIuNGE1LjQgNS40IDAgMCAxIDUtMy43eiIgZmlsbD0iI0VBNDMzNSIgZmlsbLXJ1bGU9Im5vbnplcm8iLz48cGF0aCBkPSJNMTcuNiA5LjJsLS4xLTEuOEg5djMuNGg0LjhDMTMuNiAxMiAxMyAxMyAxMiAxMy42djIuMmgzYTguOCA4LjggMCAwIDAgMi42LTYuNnoiIGZpbGw9IiM0Mjg1RjQiIGZpbGwtcnVsZT0ibm9uemVybyIvPjxwYXRoIGQ9Ik05IDE4YzIuNCAwIDQuNS0uOCA6LTIuMmwtMy0yLjJhNS40IDUuNCAwIDAgMS04LTIuOUgxVjEzYTkgOSAwIDAgMCA4IDV6IiBmaWxsPSIjMzRBODUzIiBmaWxsLXJ1bGU9Im5vbnplcm8iLz48cGF0aCBkPSJNNCAxMC43YTUuNCA1LjQgMCAwIDEgMC0zLjRWNUgxYTkgOSAwIDAgMCAwIDhsMy0yLjN6IiBmaWxsPSIjRkJCQzA1IiBmaWxsLXJ1bGU9Im5vbnplcm8iLz48cGF0aCBkPSJNOSAzLjZjMS4zIDAgMi41LjQgMy40IDEuM0wxNSAyLjNBOSA5IDAgMCAwIDEgNWwzIDIuNGE1LjQgNS40IDAgMCAxIDUtMy43eiIgZmlsbD0iI0VBNDMzNSIgZmlsbLXJ1bGU9Im5vbnplcm8iLz48cGF0aCBkPSJNMTcuNiA5LjJsLS4xLTEuOEg5djMuNGg0LjhDMTMuNiAxMiAxMyAxMyAxMiAxMy42djIuMmgzYTguOCA4LjggMCAwIDAgMi42LTYuNnoiIGZpbGw9IiM0Mjg1RjQiIGZpbGwtcnVsZT0ibm9uemVybyIvPjxwYXRoIGQ9Ik05IDE4YzIuNCAwIDQuNS0uOCA2LTIuMmwtMy0yLjJhNS40IDUuNCAwIDAgMS04LTIuOUgxVjEzYTkgOSAwIDAgMCA4IDV6IiBmaWxsPSIjMzRBODUzIiBmaWxsLXJ1bGU9Im5vbnplcm8iLz48cGF0aCBkPSJNNCAxMC43YTUuNCA1LjQgMCAwIDEgMC0zLjRWNUgxYTkgOSAwIDAgMCAwIDhsMy0yLjN6IiBmaWxsPSIjRkJCQzA1IiBmaWxsLXJ1bGU9Im5vbnplcm8iLz48cGF0aCBkPSJNOSAzLjZjMS4zIDAgMi41LjQgMy40IDEuM0wxNSAyLjNBOSA5IDAgMCAwIDEgNWwzIDIuNGE1LjQgNS40IDQgMCAxIDUtMy43eiIgZmlsbD0iI0VBNDMzNSIgZmlsbLXJ1bGU9Im5vbnplcm8iLz48L2c+PC9zdmc+" alt="Google Logo">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg" alt="Google Logo">
                         Sign up with Google
                     </button>
                 </form>
@@ -332,52 +335,33 @@
             </div>
             
             <div class="instructions">
-                <h3>Supabase Setup Instructions:</h3>
+                <h3>Firebase Setup Instructions:</h3>
                 <ol>
-                    <li>Go to <a href="https://supabase.com/" target="_blank">Supabase</a> and create an account</li>
+                    <li>Go to <a href="https://firebase.google.com/" target="_blank">Firebase</a> and create an account</li>
                     <li>Create a new project and wait for it to initialize</li>
-                    <li>Go to Authentication → Settings → Google and enable Google Auth</li>
-                    <li>Add your Google OAuth Client ID and Secret</li>
-                    <li>Add your site URL to Redirect URLs</li>
-                    <li>Go to SQL Editor and run this SQL to create a profiles table:
-                        <pre>
-CREATE TABLE profiles (
-  id UUID REFERENCES auth.users(id) PRIMARY KEY,
-  email TEXT,
-  name TEXT,
-  avatar_url TEXT,
-  updated_at TIMESTAMP WITH TIME ZONE
-);
-
-CREATE OR REPLACE FUNCTION public.handle_new_user()
-RETURNS TRIGGER AS $$
-BEGIN
-  INSERT INTO public.profiles (id, email, name, avatar_url)
-  VALUES (new.id, new.email, new.raw_user_meta_data->>'full_name', new.raw_user_meta_data->>'avatar_url');
-  RETURN new;
-END;
-$$ LANGUAGE plpgsql SECURITY DEFINER;
-
-CREATE OR REPLACE TRIGGER on_auth_user_created
-  AFTER INSERT ON auth.users
-  FOR EACH ROW EXECUTE FUNCTION public.handle_new_user();
-                        </pre>
-                    </li>
-                    <li>Replace the Supabase URL and Key in the JavaScript code below</li>
+                    <li>Enable Authentication → Sign-in method → Google</li>
+                    <li>Add your domain to authorized domains in Authentication → Settings</li>
+                    <li>Get your Firebase config from Project Settings → General → Your apps</li>
+                    <li>Replace the Firebase config in the JavaScript code below</li>
                 </ol>
             </div>
         </div>
     </div>
 
-    <!-- Include Supabase JS -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    
     <script>
-        // Initialize Supabase
-        // REPLACE THESE WITH YOUR OWN VALUES FROM SUPABASE
-        const supabaseUrl = 'https://xfghwzgszjvdejeknkwe.supabase.co';
-        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhmZ2h3emdzemp2ZGVqZWtua3dlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTgwMjExNDAsImV4cCI6MjA3MzU5NzE0MH0.QfOx_NY3zilkoLcKdCQNHJv_VMDgHz2ML2gvmKO1Ets';
-        const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+        // Firebase configuration - REPLACE WITH YOUR OWN CONFIG
+        const firebaseConfig = {
+            apiKey: "AIzaSyD2vYzivm2Gbgl_ee0t81d6r5GPHeI4Gqs",
+            authDomain: "quizontal-de977.firebaseapp.com",
+            projectId: "quizontal-de977",
+            storageBucket: "quizontal-de977.firebasestorage.app",
+            messagingSenderId: "448533191404",
+            appId: "1:448533191404:web:a9c58dc7c180d0d71fe3c9"
+        };
+        
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
         
         // DOM Elements
         const loginForm = document.getElementById('loginForm');
@@ -391,9 +375,17 @@ CREATE OR REPLACE TRIGGER on_auth_user_created
         const userEmail = document.getElementById('userEmail');
         const userImage = document.getElementById('userImage');
         const logoutBtn = document.getElementById('logoutBtn');
+        const googleSignInBtn = document.getElementById('googleSignIn');
+        const googleSignUpBtn = document.getElementById('googleSignUp');
         
         // Check if user is already logged in
-        checkUser();
+        auth.onAuthStateChanged((user) => {
+            if (user) {
+                updateUIForUser(user);
+            } else {
+                updateUIForNoUser();
+            }
+        });
         
         // Toggle between forms
         loginTab.addEventListener('click', () => {
@@ -428,15 +420,8 @@ CREATE OR REPLACE TRIGGER on_auth_user_created
             const password = document.getElementById('loginPassword').value;
             
             try {
-                const { data, error } = await supabase.auth.signInWithPassword({
-                    email,
-                    password
-                });
-                
-                if (error) throw error;
-                
+                const userCredential = await auth.signInWithEmailAndPassword(email, password);
                 showMessage('Successfully signed in!', 'success');
-                checkUser();
             } catch (error) {
                 showMessage(error.message, 'error');
             }
@@ -455,19 +440,14 @@ CREATE OR REPLACE TRIGGER on_auth_user_created
             }
             
             try {
-                const { data, error } = await supabase.auth.signUp({
-                    email,
-                    password,
-                    options: {
-                        data: {
-                            name: name,
-                        }
-                    }
+                const userCredential = await auth.createUserWithEmailAndPassword(email, password);
+                
+                // Update profile with name
+                await userCredential.user.updateProfile({
+                    displayName: name
                 });
                 
-                if (error) throw error;
-                
-                showMessage('Signup successful! Please check your email for confirmation.', 'success');
+                showMessage('Signup successful! You are now logged in.', 'success');
             } catch (error) {
                 showMessage(error.message, 'error');
             }
@@ -475,66 +455,49 @@ CREATE OR REPLACE TRIGGER on_auth_user_created
         
         // Google Sign In/Sign Up
         async function handleGoogleAuth() {
+            const provider = new firebase.auth.GoogleAuthProvider();
+            
             try {
-                const { data, error } = await supabase.auth.signInWithOAuth({
-                    provider: 'google',
-                    options: {
-                        redirectTo: window.location.origin
-                    }
-                });
-                
-                if (error) throw error;
+                const result = await auth.signInWithPopup(provider);
+                // This will automatically trigger the onAuthStateChanged listener
             } catch (error) {
                 showMessage(error.message, 'error');
             }
         }
         
-        // Check user function
-        async function checkUser() {
-            const { data: { session } } = await supabase.auth.getSession();
+        // Update UI for logged in user
+        function updateUIForUser(user) {
+            userName.textContent = user.displayName || user.email;
+            userEmail.textContent = user.email;
             
-            if (session?.user) {
-                // Get user profile
-                const { data: profile, error } = await supabase
-                    .from('profiles')
-                    .select('*')
-                    .eq('id', session.user.id)
-                    .single();
-                
-                if (profile) {
-                    // Show user info
-                    userName.textContent = profile.name || session.user.email;
-                    userEmail.textContent = session.user.email;
-                    
-                    // Try to get avatar from Google
-                    if (session.user.app_metadata.provider === 'google') {
-                        userImage.src = session.user.user_metadata.avatar_url || '';
-                    } else {
-                        userImage.style.display = 'none';
-                    }
-                    
-                    // Switch to user info view
-                    loginSection.style.display = 'none';
-                    userInfo.style.display = 'block';
-                }
+            // Try to get user photo
+            if (user.photoURL) {
+                userImage.src = user.photoURL;
+                userImage.style.display = 'block';
+            } else {
+                userImage.style.display = 'none';
             }
+            
+            // Switch to user info view
+            loginSection.style.display = 'none';
+            userInfo.style.display = 'block';
+        }
+        
+        // Update UI for no user
+        function updateUIForNoUser() {
+            // Clear form fields
+            loginForm.reset();
+            signupForm.reset();
+            
+            // Switch back to login view
+            userInfo.style.display = 'none';
+            loginSection.style.display = 'block';
         }
         
         // Logout handler
         logoutBtn.addEventListener('click', async () => {
             try {
-                const { error } = await supabase.auth.signOut();
-                if (error) throw error;
-                
-                // Clear user data
-                userName.textContent = '';
-                userEmail.textContent = '';
-                userImage.src = '';
-                
-                // Switch back to login view
-                userInfo.style.display = 'none';
-                loginSection.style.display = 'block';
-                
+                await auth.signOut();
                 showMessage('You have been logged out.', 'info');
             } catch (error) {
                 showMessage(error.message, 'error');
@@ -542,19 +505,11 @@ CREATE OR REPLACE TRIGGER on_auth_user_created
         });
         
         // Add event listeners for Google buttons
-        document.getElementById('googleSignIn').addEventListener('click', handleGoogleAuth);
-        document.getElementById('googleSignUp').addEventListener('click', handleGoogleAuth);
-        
-        // Listen for auth state changes
-        supabase.auth.onAuthStateChange((event, session) => {
-            if (event === 'SIGNED_IN') {
-                checkUser();
-                showMessage('Successfully signed in!', 'success');
-            }
-        });
+        googleSignInBtn.addEventListener('click', handleGoogleAuth);
+        googleSignUpBtn.addEventListener('click', handleGoogleAuth);
         
         // Show instructions message
-        showMessage('Remember to configure Supabase with your Google OAuth credentials', 'info');
+        showMessage('Remember to configure Firebase with your Google OAuth credentials', 'info');
     </script>
 </body>
 </html>
