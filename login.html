@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Google OAuth Login</title>
+    <title>Google OAuth with Firebase Data</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
@@ -27,7 +27,7 @@
             border-radius: 15px;
             box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
             width: 100%;
-            max-width: 450px;
+            max-width: 500px;
             overflow: hidden;
             animation: fadeIn 0.5s ease-out;
         }
@@ -311,13 +311,34 @@
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
+        
+        .firebase-data {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            border-left: 4px solid #28a745;
+        }
+        
+        .firebase-data h4 {
+            margin-bottom: 10px;
+            color: #28a745;
+        }
+        
+        .firebase-data pre {
+            background-color: #f1f1f1;
+            padding: 10px;
+            border-radius: 5px;
+            overflow-x: auto;
+            font-size: 12px;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
-            <h1>Google OAuth Login</h1>
-            <p>Sign in or create an account to continue</p>
+            <h1>Google OAuth with Firebase Data</h1>
+            <p>Sign in with Google and store data in Firebase</p>
         </div>
         
         <div class="form-container">
@@ -397,27 +418,49 @@
                 <img id="userImage" src="" alt="User Image">
                 <h3 id="userName"></h3>
                 <p id="userEmail"></p>
+                
+                <div class="firebase-data">
+                    <h4>Firebase User Data</h4>
+                    <pre id="firebaseData">Loading user data from Firebase...</pre>
+                </div>
+                
                 <button class="logout-btn" id="logoutBtn">Log Out</button>
             </div>
             
             <div class="instructions">
-                <h3>Google OAuth Setup Instructions:</h3>
+                <h3>Setup Instructions:</h3>
                 <ol>
-                    <li>Go to the <a href="https://console.developers.google.com/" target="_blank">Google Cloud Console</a></li>
-                    <li>Create a new project or select an existing one</li>
-                    <li>Enable the Google+ API</li>
-                    <li>Go to "Credentials" and create an OAuth 2.0 Client ID</li>
-                    <li>Add your domain to authorized JavaScript origins</li>
-                    <li>Replace the placeholder Client ID in the JavaScript code</li>
+                    <li>Set up a Firebase project at <a href="https://console.firebase.google.com/" target="_blank">Firebase Console</a></li>
+                    <li>Enable Firestore Database in your Firebase project</li>
+                    <li>Set up Google OAuth in the <a href="https://console.developers.google.com/" target="_blank">Google Cloud Console</a></li>
+                    <li>Replace the Firebase config and Google Client ID in the code</li>
                 </ol>
             </div>
         </div>
     </div>
 
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    
     <!-- Google API -->
     <script src="https://accounts.google.com/gsi/client" async defer></script>
     
     <script>
+        // Firebase configuration - REPLACE WITH YOUR OWN CONFIG
+        const firebaseConfig = {
+            apiKey: "AIzaSyD2vYzivm2Gbgl_ee0t81d6r5GPHeI4Gqs",
+            authDomain: "quizontal-de977.firebaseapp.com",
+            projectId: "quizontal-de977",
+            storageBucket: "quizontal-de977.firebasestorage.app",
+            messagingSenderId: "448533191404",
+            appId: "1:448533191404:web:f13787dc074def891fe3c9"
+        };
+        
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+        
         // DOM Elements
         const loginForm = document.getElementById('loginForm');
         const signupForm = document.getElementById('signupForm');
@@ -432,6 +475,7 @@
         const logoutBtn = document.getElementById('logoutBtn');
         const googleSignInBtn = document.getElementById('googleSignIn');
         const googleSignUpBtn = document.getElementById('googleSignUp');
+        const firebaseDataElement = document.getElementById('firebaseData');
         
         // Password toggle functionality
         function setupPasswordToggle(passwordId, toggleId) {
@@ -552,17 +596,56 @@
         };
         
         // Handle Google Sign In
-        function handleGoogleSignIn(response) {
+        async function handleGoogleSignIn(response) {
+            showMessage('Signing in with Google...', 'info');
+            
             // Decode the JWT response
             const responsePayload = parseJwt(response.credential);
             
             // Store user data in localStorage for demo purposes
-            // In a real app, you would verify the token with your backend
             localStorage.setItem('googleUser', JSON.stringify(responsePayload));
+            
+            // Save user data to Firebase
+            await saveUserToFirebase(responsePayload);
             
             // Update UI
             checkUser();
             showMessage('Successfully signed in with Google!', 'success');
+        }
+        
+        // Save user data to Firebase
+        async function saveUserToFirebase(userData) {
+            try {
+                // Add a new document in collection "users" with ID from Google
+                await db.collection('users').doc(userData.sub).set({
+                    name: userData.name,
+                    email: userData.email,
+                    picture: userData.picture,
+                    lastLogin: new Date(),
+                    loginCount: firebase.firestore.FieldValue.increment(1)
+                }, { merge: true });
+                
+                console.log('User data saved to Firebase');
+            } catch (error) {
+                console.error('Error saving user data to Firebase:', error);
+                showMessage('Error saving user data to Firebase', 'error');
+            }
+        }
+        
+        // Get user data from Firebase
+        async function getUserFromFirebase(userId) {
+            try {
+                const doc = await db.collection('users').doc(userId).get();
+                if (doc.exists) {
+                    return doc.data();
+                } else {
+                    console.log('No such document!');
+                    return null;
+                }
+            } catch (error) {
+                console.error('Error getting user data from Firebase:', error);
+                return null;
+            }
         }
         
         // Helper function to parse JWT
@@ -575,7 +658,7 @@
         }
         
         // Check user function
-        function checkUser() {
+        async function checkUser() {
             const userData = localStorage.getItem('googleUser');
             
             if (userData) {
@@ -590,6 +673,12 @@
                     userImage.src = user.picture;
                 } else {
                     userImage.style.display = 'none';
+                }
+                
+                // Get user data from Firebase
+                const firebaseUserData = await getUserFromFirebase(user.sub);
+                if (firebaseUserData) {
+                    firebaseDataElement.textContent = JSON.stringify(firebaseUserData, null, 2);
                 }
                 
                 // Switch to user info view
@@ -607,6 +696,7 @@
             userName.textContent = '';
             userEmail.textContent = '';
             userImage.src = '';
+            firebaseDataElement.textContent = 'No user data';
             
             // Switch back to login view
             userInfo.style.display = 'none';
@@ -619,7 +709,7 @@
         });
         
         // Show instructions message
-        showMessage('Remember to configure Google OAuth with your Client ID', 'info');
+        showMessage('Remember to configure Firebase and Google OAuth with your credentials', 'info');
     </script>
 </body>
 </html>
