@@ -600,7 +600,7 @@ async function handleGoogleSignIn(response) {
   showMessage('Signing in with Google...', 'info');
   
   try {
-    const backendResponse = await fetch(`${YOUR_BACKEND_URL}/api/google-auth`, {
+    const backendResponse = await fetch(`${https://welcome-email-seven.vercel.app/}/api/google-auth`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
