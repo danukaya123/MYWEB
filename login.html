@@ -596,22 +596,68 @@
         };
         
         // Handle Google Sign In
-        async function handleGoogleSignIn(response) {
-            showMessage('Signing in with Google...', 'info');
-            
-            // Decode the JWT response
-            const responsePayload = parseJwt(response.credential);
-            
-            // Store user data in localStorage for demo purposes
-            localStorage.setItem('googleUser', JSON.stringify(responsePayload));
-            
-            // Save user data to Firebase
-            await saveUserToFirebase(responsePayload);
-            
-            // Update UI
-            checkUser();
-            showMessage('Successfully signed in with Google!', 'success');
-        }
+async function handleGoogleSignIn(response) {
+  showMessage('Signing in with Google...', 'info');
+  
+  try {
+    const backendResponse = await fetch(`${YOUR_BACKEND_URL}/api/google-auth`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ credential: response.credential })
+    });
+    
+    const data = await backendResponse.json();
+    
+    if (data.success) {
+      // Store user data in localStorage
+      localStorage.setItem('googleUser', JSON.stringify(data.user));
+      
+      // Update UI
+      checkUser();
+      showMessage('Successfully signed in with Google! Welcome email sent.', 'success');
+    } else {
+      showMessage(data.message, 'error');
+    }
+  } catch (error) {
+    console.error('Error with Google sign-in:', error);
+    showMessage('Error signing in with Google', 'error');
+  }
+}
+
+// Update the form submission handlers
+loginForm.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const email = document.getElementById('loginEmail').value;
+  const password = document.getElementById('loginPassword').value;
+  
+  showMessage('Signing in...', 'info');
+  
+  try {
+    const response = await fetch(`${https://welcome-email-seven.vercel.app}/api/login`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ email, password })
+    });
+    
+    const data = await response.json();
+    
+    if (data.success) {
+      // Store user data
+      localStorage.setItem('user', JSON.stringify(data.user));
+      showMessage('Login successful!', 'success');
+      // Update UI or redirect
+    } else {
+      showMessage(data.message, 'error');
+    }
+  } catch (error) {
+    console.error('Login error:', error);
+    showMessage('Error during login', 'error');
+  }
+});
         
         // Save user data to Firebase
         async function saveUserToFirebase(userData) {
