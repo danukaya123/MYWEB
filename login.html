@@ -1,11 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Firebase Auth with Google</title>
-  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Google OAuth Login</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
             margin: 0;
@@ -30,6 +29,12 @@
             width: 100%;
             max-width: 450px;
             overflow: hidden;
+            animation: fadeIn 0.5s ease-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
         
         .header {
@@ -65,6 +70,8 @@
             font-weight: 500;
             color: #777;
             transition: all 0.3s;
+            flex: 1;
+            text-align: center;
         }
         
         .tab.active {
@@ -78,10 +85,17 @@
         
         .form.active {
             display: block;
+            animation: slideIn 0.3s ease-out;
+        }
+        
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(20px); }
+            to { opacity: 1; transform: translateX(0); }
         }
         
         .form-control {
             margin-bottom: 20px;
+            position: relative;
         }
         
         .form-control label {
@@ -93,11 +107,18 @@
         
         .form-control input {
             width: 100%;
-            padding: 14px;
+            padding: 14px 14px 14px 45px;
             border: 1px solid #ddd;
             border-radius: 8px;
             font-size: 16px;
             transition: border 0.3s;
+        }
+        
+        .form-control i {
+            position: absolute;
+            left: 15px;
+            top: 42px;
+            color: #777;
         }
         
         .form-control input:focus {
@@ -117,11 +138,12 @@
             font-size: 16px;
             font-weight: 600;
             cursor: pointer;
-            transition: opacity 0.3s;
+            transition: all 0.3s;
         }
         
         .btn:hover {
             opacity: 0.9;
+            transform: translateY(-2px);
         }
         
         .divider {
@@ -155,11 +177,13 @@
             font-size: 16px;
             font-weight: 500;
             cursor: pointer;
-            transition: background-color 0.3s;
+            transition: all 0.3s;
         }
         
         .google-btn:hover {
             background-color: #f5f5f5;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
         
         .google-btn img {
@@ -173,6 +197,7 @@
             border-radius: 8px;
             text-align: center;
             display: none;
+            animation: fadeIn 0.5s ease-out;
         }
         
         .success {
@@ -197,6 +222,7 @@
             text-align: center;
             padding: 20px;
             display: none;
+            animation: fadeIn 0.5s ease-out;
         }
         
         .user-info img {
@@ -204,6 +230,7 @@
             height: 80px;
             border-radius: 50%;
             margin-bottom: 15px;
+            border: 3px solid #2575fc;
         }
         
         .user-info h3 {
@@ -229,6 +256,7 @@
         
         .logout-btn:hover {
             background: #c82333;
+            transform: translateY(-2px);
         }
         
         .instructions {
@@ -259,209 +287,339 @@
             border-radius: 3px;
             font-family: monospace;
         }
+        
+        .password-toggle {
+            position: absolute;
+            right: 15px;
+            top: 42px;
+            cursor: pointer;
+            color: #777;
+        }
+        
+        .loader {
+            display: none;
+            border: 3px solid #f3f3f3;
+            border-radius: 50%;
+            border-top: 3px solid #3498db;
+            width: 20px;
+            height: 20px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
     </style>
 </head>
 <body>
-  <div class="container">
-    <div class="header">
-      <h1>Firebase Auth with Google</h1>
-      <p>Sign in or create an account to continue</p>
-    </div>
-
-    <div class="form-container">
-      <div id="message" class="message"></div>
-      <div id="loginSection">
-        <div class="tabs">
-          <div class="tab active" id="loginTab">Sign In</div>
-          <div class="tab" id="signupTab">Sign Up</div>
+    <div class="container">
+        <div class="header">
+            <h1>Google OAuth Login</h1>
+            <p>Sign in or create an account to continue</p>
         </div>
-
-        <!-- Login Form -->
-        <form id="loginForm" class="form active">
-          <div class="form-control">
-            <label for="loginEmail">Email</label>
-            <input type="email" id="loginEmail" placeholder="Enter your email" required>
-          </div>
-          <div class="form-control">
-            <label for="loginPassword">Password</label>
-            <input type="password" id="loginPassword" placeholder="Enter your password" required>
-          </div>
-          <button type="submit" class="btn">Sign In</button>
-
-          <div class="divider"><span>or</span></div>
-
-          <button type="button" class="google-btn" id="googleSignIn">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg" alt="Google Logo">
-            Sign in with Google
-          </button>
-        </form>
-
-        <!-- Signup Form -->
-        <form id="signupForm" class="form">
-          <div class="form-control">
-            <label for="signupName">Full Name</label>
-            <input type="text" id="signupName" placeholder="Enter your full name" required>
-          </div>
-          <div class="form-control">
-            <label for="signupEmail">Email</label>
-            <input type="email" id="signupEmail" placeholder="Enter your email" required>
-          </div>
-          <div class="form-control">
-            <label for="signupPassword">Password</label>
-            <input type="password" id="signupPassword" placeholder="Create a password" required>
-          </div>
-          <div class="form-control">
-            <label for="confirmPassword">Confirm Password</label>
-            <input type="password" id="confirmPassword" placeholder="Confirm your password" required>
-          </div>
-          <button type="submit" class="btn">Create Account</button>
-
-          <div class="divider"><span>or</span></div>
-
-          <button type="button" class="google-btn" id="googleSignUp">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg" alt="Google Logo">
-            Sign up with Google
-          </button>
-        </form>
-      </div>
-
-      <div id="userInfo" class="user-info">
-        <img id="userImage" src="" alt="User Image">
-        <h3 id="userName"></h3>
-        <p id="userEmail"></p>
-        <button class="logout-btn" id="logoutBtn">Log Out</button>
-      </div>
+        
+        <div class="form-container">
+            <div id="message" class="message"></div>
+            
+            <div id="loginSection">
+                <div class="tabs">
+                    <div class="tab active" id="loginTab">Sign In</div>
+                    <div class="tab" id="signupTab">Sign Up</div>
+                </div>
+                
+                <!-- Login Form -->
+                <form id="loginForm" class="form active">
+                    <div class="form-control">
+                        <label for="loginEmail">Email</label>
+                        <i class="fas fa-envelope"></i>
+                        <input type="email" id="loginEmail" placeholder="Enter your email" required>
+                    </div>
+                    <div class="form-control">
+                        <label for="loginPassword">Password</label>
+                        <i class="fas fa-lock"></i>
+                        <input type="password" id="loginPassword" placeholder="Enter your password" required>
+                        <span class="password-toggle" id="loginPasswordToggle">
+                            <i class="fas fa-eye"></i>
+                        </span>
+                    </div>
+                    <button type="submit" class="btn">Sign In</button>
+                    
+                    <div class="divider"><span>or</span></div>
+                    
+                    <button type="button" class="google-btn" id="googleSignIn">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg" alt="Google Logo">
+                        Sign in with Google
+                    </button>
+                </form>
+                
+                <!-- Signup Form -->
+                <form id="signupForm" class="form">
+                    <div class="form-control">
+                        <label for="signupName">Full Name</label>
+                        <i class="fas fa-user"></i>
+                        <input type="text" id="signupName" placeholder="Enter your full name" required>
+                    </div>
+                    <div class="form-control">
+                        <label for="signupEmail">Email</label>
+                        <i class="fas fa-envelope"></i>
+                        <input type="email" id="signupEmail" placeholder="Enter your email" required>
+                    </div>
+                    <div class="form-control">
+                        <label for="signupPassword">Password</label>
+                        <i class="fas fa-lock"></i>
+                        <input type="password" id="signupPassword" placeholder="Create a password" required>
+                        <span class="password-toggle" id="signupPasswordToggle">
+                            <i class="fas fa-eye"></i>
+                        </span>
+                    </div>
+                    <div class="form-control">
+                        <label for="confirmPassword">Confirm Password</label>
+                        <i class="fas fa-lock"></i>
+                        <input type="password" id="confirmPassword" placeholder="Confirm your password" required>
+                        <span class="password-toggle" id="confirmPasswordToggle">
+                            <i class="fas fa-eye"></i>
+                        </span>
+                    </div>
+                    <button type="submit" class="btn">Create Account</button>
+                    
+                    <div class="divider"><span>or</span></div>
+                    
+                    <button type="button" class="google-btn" id="googleSignUp">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg" alt="Google Logo">
+                        Sign up with Google
+                    </button>
+                </form>
+            </div>
+            
+            <div id="userInfo" class="user-info">
+                <img id="userImage" src="" alt="User Image">
+                <h3 id="userName"></h3>
+                <p id="userEmail"></p>
+                <button class="logout-btn" id="logoutBtn">Log Out</button>
+            </div>
+            
+            <div class="instructions">
+                <h3>Google OAuth Setup Instructions:</h3>
+                <ol>
+                    <li>Go to the <a href="https://console.developers.google.com/" target="_blank">Google Cloud Console</a></li>
+                    <li>Create a new project or select an existing one</li>
+                    <li>Enable the Google+ API</li>
+                    <li>Go to "Credentials" and create an OAuth 2.0 Client ID</li>
+                    <li>Add your domain to authorized JavaScript origins</li>
+                    <li>Replace the placeholder Client ID in the JavaScript code</li>
+                </ol>
+            </div>
+        </div>
     </div>
-  </div>
 
-  <script>
-    // Firebase configuration - REPLACE WITH YOUR CONFIG
-    const firebaseConfig = {
-      apiKey: "AIzaSyD2vYzivm2Gbgl_ee0t81d6r5GPHeI4Gqs",
-      authDomain: "quizontal-de977.firebaseapp.com",
-      projectId: "quizontal-de977",
-      storageBucket: "quizontal-de977.appspot.com",
-      messagingSenderId: "123456789",
-      appId: "1:448533191404:web:a9c58dc7c180d0d71fe3c9"
-    };
-
-    // Initialize Firebase
-    firebase.initializeApp(firebaseConfig);
-    const auth = firebase.auth();
-
-    // DOM elements
-    const loginForm = document.getElementById('loginForm');
-    const signupForm = document.getElementById('signupForm');
-    const loginTab = document.getElementById('loginTab');
-    const signupTab = document.getElementById('signupTab');
-    const messageDiv = document.getElementById('message');
-    const loginSection = document.getElementById('loginSection');
-    const userInfo = document.getElementById('userInfo');
-    const userName = document.getElementById('userName');
-    const userEmail = document.getElementById('userEmail');
-    const userImage = document.getElementById('userImage');
-    const logoutBtn = document.getElementById('logoutBtn');
-    const googleSignInBtn = document.getElementById('googleSignIn');
-    const googleSignUpBtn = document.getElementById('googleSignUp');
-
-    // Google redirect login
-    async function handleGoogleAuth() {
-      const provider = new firebase.auth.GoogleAuthProvider();
-      try {
-        await auth.signInWithRedirect(provider);
-      } catch (error) {
-        showMessage(error.message, 'error');
-      }
-    }
-
-    // Handle result after redirect
-    auth.getRedirectResult().then((result) => {
-      if (result.user) {
-        updateUIForUser(result.user);
-        showMessage('Successfully signed in with Google!', 'success');
-      }
-    }).catch((error) => {
-      showMessage(error.message, 'error');
-    });
-
-    // Toggle forms
-    loginTab.addEventListener('click', () => {
-      loginTab.classList.add('active');
-      signupTab.classList.remove('active');
-      loginForm.classList.add('active');
-      signupForm.classList.remove('active');
-    });
-
-    signupTab.addEventListener('click', () => {
-      signupTab.classList.add('active');
-      loginTab.classList.remove('active');
-      signupForm.classList.add('active');
-      loginForm.classList.remove('active');
-    });
-
-    // Show messages
-    function showMessage(message, type) {
-      messageDiv.textContent = message;
-      messageDiv.className = `message ${type}`;
-      messageDiv.style.display = 'block';
-      setTimeout(() => { messageDiv.style.display = 'none'; }, 5000);
-    }
-
-    // Auth state change
-    auth.onAuthStateChanged((user) => {
-      if (user) updateUIForUser(user);
-      else updateUIForNoUser();
-    });
-
-    function updateUIForUser(user) {
-      userName.textContent = user.displayName || user.email;
-      userEmail.textContent = user.email;
-      if (user.photoURL) { userImage.src = user.photoURL; userImage.style.display = 'block'; }
-      else userImage.style.display = 'none';
-      loginSection.style.display = 'none';
-      userInfo.style.display = 'block';
-    }
-
-    function updateUIForNoUser() {
-      loginForm.reset();
-      signupForm.reset();
-      userInfo.style.display = 'none';
-      loginSection.style.display = 'block';
-    }
-
-    logoutBtn.addEventListener('click', async () => {
-      try { await auth.signOut(); showMessage('Logged out.', 'info'); }
-      catch (err) { showMessage(err.message, 'error'); }
-    });
-
-    // Email/password login/signup (unchanged)
-    loginForm.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const email = document.getElementById('loginEmail').value;
-      const password = document.getElementById('loginPassword').value;
-      try { await auth.signInWithEmailAndPassword(email, password); showMessage('Signed in!', 'success'); }
-      catch (err) { showMessage(err.message, 'error'); }
-    });
-
-    signupForm.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const name = document.getElementById('signupName').value;
-      const email = document.getElementById('signupEmail').value;
-      const password = document.getElementById('signupPassword').value;
-      const confirmPassword = document.getElementById('confirmPassword').value;
-      if (password !== confirmPassword) { showMessage('Passwords do not match!', 'error'); return; }
-      try {
-        const userCredential = await auth.createUserWithEmailAndPassword(email, password);
-        await userCredential.user.updateProfile({ displayName: name });
-        showMessage('Signup successful!', 'success');
-      } catch (err) { showMessage(err.message, 'error'); }
-    });
-
-    // Google buttons
-    googleSignInBtn.addEventListener('click', handleGoogleAuth);
-    googleSignUpBtn.addEventListener('click', handleGoogleAuth);
-
-    showMessage('Remember to configure Firebase with Google OAuth credentials', 'info');
-  </script>
+    <!-- Google API -->
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    
+    <script>
+        // DOM Elements
+        const loginForm = document.getElementById('loginForm');
+        const signupForm = document.getElementById('signupForm');
+        const loginTab = document.getElementById('loginTab');
+        const signupTab = document.getElementById('signupTab');
+        const messageDiv = document.getElementById('message');
+        const loginSection = document.getElementById('loginSection');
+        const userInfo = document.getElementById('userInfo');
+        const userName = document.getElementById('userName');
+        const userEmail = document.getElementById('userEmail');
+        const userImage = document.getElementById('userImage');
+        const logoutBtn = document.getElementById('logoutBtn');
+        const googleSignInBtn = document.getElementById('googleSignIn');
+        const googleSignUpBtn = document.getElementById('googleSignUp');
+        
+        // Password toggle functionality
+        function setupPasswordToggle(passwordId, toggleId) {
+            const passwordField = document.getElementById(passwordId);
+            const toggleButton = document.getElementById(toggleId);
+            
+            toggleButton.addEventListener('click', () => {
+                if (passwordField.type === 'password') {
+                    passwordField.type = 'text';
+                    toggleButton.innerHTML = '<i class="fas fa-eye-slash"></i>';
+                } else {
+                    passwordField.type = 'password';
+                    toggleButton.innerHTML = '<i class="fas fa-eye"></i>';
+                }
+            });
+        }
+        
+        setupPasswordToggle('loginPassword', 'loginPasswordToggle');
+        setupPasswordToggle('signupPassword', 'signupPasswordToggle');
+        setupPasswordToggle('confirmPassword', 'confirmPasswordToggle');
+        
+        // Check if user is already logged in
+        checkUser();
+        
+        // Toggle between forms
+        loginTab.addEventListener('click', () => {
+            loginTab.classList.add('active');
+            signupTab.classList.remove('active');
+            loginForm.classList.add('active');
+            signupForm.classList.remove('active');
+        });
+        
+        signupTab.addEventListener('click', () => {
+            signupTab.classList.add('active');
+            loginTab.classList.remove('active');
+            signupForm.classList.add('active');
+            loginForm.classList.remove('active');
+        });
+        
+        // Show message function
+        function showMessage(message, type) {
+            messageDiv.textContent = message;
+            messageDiv.className = `message ${type}`;
+            messageDiv.style.display = 'block';
+            
+            setTimeout(() => {
+                messageDiv.style.display = 'none';
+            }, 5000);
+        }
+        
+        // Form submission handlers
+        loginForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            
+            // Simulate login process
+            showMessage('Signing in...', 'info');
+            
+            // In a real implementation, you would validate credentials with your backend
+            setTimeout(() => {
+                showMessage('Sign in functionality would be implemented with your backend', 'info');
+            }, 1000);
+        });
+        
+        signupForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const name = document.getElementById('signupName').value;
+            const email = document.getElementById('signupEmail').value;
+            const password = document.getElementById('signupPassword').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            
+            if (password !== confirmPassword) {
+                showMessage('Passwords do not match!', 'error');
+                return;
+            }
+            
+            // Simulate signup process
+            showMessage('Creating account...', 'info');
+            
+            // In a real implementation, you would send this data to your backend
+            setTimeout(() => {
+                showMessage('Account creation would be implemented with your backend', 'info');
+            }, 1000);
+        });
+        
+        // Google OAuth configuration
+        const clientId = '1053520824725-at3vm404ps6i8v3ur946lh9ghuaiards.apps.googleusercontent.com'; // Replace with your actual Google Client ID
+        
+        // Initialize Google OAuth
+        window.onload = function () {
+            google.accounts.id.initialize({
+                client_id: clientId,
+                callback: handleGoogleSignIn
+            });
+            
+            // Render Google Sign In button
+            google.accounts.id.renderButton(
+                document.getElementById("googleSignIn"),
+                { 
+                    theme: "outline", 
+                    size: "large",
+                    width: document.getElementById('googleSignIn').offsetWidth,
+                    text: "signin_with"
+                }
+            );
+            
+            // Render Google Sign Up button
+            google.accounts.id.renderButton(
+                document.getElementById("googleSignUp"),
+                { 
+                    theme: "outline", 
+                    size: "large",
+                    width: document.getElementById('googleSignUp').offsetWidth,
+                    text: "signup_with"
+                }
+            );
+        };
+        
+        // Handle Google Sign In
+        function handleGoogleSignIn(response) {
+            // Decode the JWT response
+            const responsePayload = parseJwt(response.credential);
+            
+            // Store user data in localStorage for demo purposes
+            // In a real app, you would verify the token with your backend
+            localStorage.setItem('googleUser', JSON.stringify(responsePayload));
+            
+            // Update UI
+            checkUser();
+            showMessage('Successfully signed in with Google!', 'success');
+        }
+        
+        // Helper function to parse JWT
+        function parseJwt(token) {
+            try {
+                return JSON.parse(atob(token.split('.')[1]));
+            } catch (e) {
+                return null;
+            }
+        }
+        
+        // Check user function
+        function checkUser() {
+            const userData = localStorage.getItem('googleUser');
+            
+            if (userData) {
+                const user = JSON.parse(userData);
+                
+                // Show user info
+                userName.textContent = user.name || user.email;
+                userEmail.textContent = user.email;
+                
+                // Try to get user picture
+                if (user.picture) {
+                    userImage.src = user.picture;
+                } else {
+                    userImage.style.display = 'none';
+                }
+                
+                // Switch to user info view
+                loginSection.style.display = 'none';
+                userInfo.style.display = 'block';
+            }
+        }
+        
+        // Logout handler
+        logoutBtn.addEventListener('click', () => {
+            // Clear user data
+            localStorage.removeItem('googleUser');
+            
+            // Clear user info
+            userName.textContent = '';
+            userEmail.textContent = '';
+            userImage.src = '';
+            
+            // Switch back to login view
+            userInfo.style.display = 'none';
+            loginSection.style.display = 'block';
+            
+            showMessage('You have been logged out.', 'info');
+            
+            // Google also provides a way to logout from their service
+            google.accounts.id.disableAutoSelect();
+        });
+        
+        // Show instructions message
+        showMessage('Remember to configure Google OAuth with your Client ID', 'info');
+    </script>
 </body>
 </html>
