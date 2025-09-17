@@ -1,12 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Firebase Auth with Google</title>
-    <!-- Firebase SDK -->
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Firebase Auth with Google</title>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
     <style>
         * {
             margin: 0;
@@ -263,253 +262,206 @@
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <h1>Firebase Auth with Google</h1>
-            <p>Sign in or create an account to continue</p>
-        </div>
-        
-        <div class="form-container">
-            <div id="message" class="message"></div>
-            
-            <div id="loginSection">
-                <div class="tabs">
-                    <div class="tab active" id="loginTab">Sign In</div>
-                    <div class="tab" id="signupTab">Sign Up</div>
-                </div>
-                
-                <!-- Login Form -->
-                <form id="loginForm" class="form active">
-                    <div class="form-control">
-                        <label for="loginEmail">Email</label>
-                        <input type="email" id="loginEmail" placeholder="Enter your email" required>
-                    </div>
-                    <div class="form-control">
-                        <label for="loginPassword">Password</label>
-                        <input type="password" id="loginPassword" placeholder="Enter your password" required>
-                    </div>
-                    <button type="submit" class="btn">Sign In</button>
-                    
-                    <div class="divider"><span>or</span></div>
-                    
-                    <button type="button" class="google-btn" id="googleSignIn">
-                        <img src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg" alt="Google Logo">
-                        Sign in with Google
-                    </button>
-                </form>
-                
-                <!-- Signup Form -->
-                <form id="signupForm" class="form">
-                    <div class="form-control">
-                        <label for="signupName">Full Name</label>
-                        <input type="text" id="signupName" placeholder="Enter your full name" required>
-                    </div>
-                    <div class="form-control">
-                        <label for="signupEmail">Email</label>
-                        <input type="email" id="signupEmail" placeholder="Enter your email" required>
-                    </div>
-                    <div class="form-control">
-                        <label for="signupPassword">Password</label>
-                        <input type="password" id="signupPassword" placeholder="Create a password" required>
-                    </div>
-                    <div class="form-control">
-                        <label for="confirmPassword">Confirm Password</label>
-                        <input type="password" id="confirmPassword" placeholder="Confirm your password" required>
-                    </div>
-                    <button type="submit" class="btn">Create Account</button>
-                    
-                    <div class="divider"><span>or</span></div>
-                    
-                    <button type="button" class="google-btn" id="googleSignUp">
-                        <img src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg" alt="Google Logo">
-                        Sign up with Google
-                    </button>
-                </form>
-            </div>
-            
-            <div id="userInfo" class="user-info">
-                <img id="userImage" src="" alt="User Image">
-                <h3 id="userName"></h3>
-                <p id="userEmail"></p>
-                <button class="logout-btn" id="logoutBtn">Log Out</button>
-            </div>
-            
-            <div class="instructions">
-                <h3>Firebase Setup Instructions:</h3>
-                <ol>
-                    <li>Go to <a href="https://firebase.google.com/" target="_blank">Firebase</a> and create an account</li>
-                    <li>Create a new project and wait for it to initialize</li>
-                    <li>Enable Authentication → Sign-in method → Google</li>
-                    <li>Add your domain to authorized domains in Authentication → Settings</li>
-                    <li>Get your Firebase config from Project Settings → General → Your apps</li>
-                    <li>Replace the Firebase config in the JavaScript code below</li>
-                </ol>
-            </div>
-        </div>
+  <div class="container">
+    <div class="header">
+      <h1>Firebase Auth with Google</h1>
+      <p>Sign in or create an account to continue</p>
     </div>
 
-    <script>
-        // Firebase configuration - REPLACE WITH YOUR OWN CONFIG
-        const firebaseConfig = {
-            apiKey: "AIzaSyD2vYzivm2Gbgl_ee0t81d6r5GPHeI4Gqs",
-            authDomain: "quizontal-de977.firebaseapp.com",
-            projectId: "quizontal-de977",
-            storageBucket: "quizontal-de977.firebasestorage.app",
-            messagingSenderId: "448533191404",
-            appId: "1:448533191404:web:a9c58dc7c180d0d71fe3c9"
-        };
-        
-        // Initialize Firebase
-        firebase.initializeApp(firebaseConfig);
-        const auth = firebase.auth();
-        
-        // DOM Elements
-        const loginForm = document.getElementById('loginForm');
-        const signupForm = document.getElementById('signupForm');
-        const loginTab = document.getElementById('loginTab');
-        const signupTab = document.getElementById('signupTab');
-        const messageDiv = document.getElementById('message');
-        const loginSection = document.getElementById('loginSection');
-        const userInfo = document.getElementById('userInfo');
-        const userName = document.getElementById('userName');
-        const userEmail = document.getElementById('userEmail');
-        const userImage = document.getElementById('userImage');
-        const logoutBtn = document.getElementById('logoutBtn');
-        const googleSignInBtn = document.getElementById('googleSignIn');
-        const googleSignUpBtn = document.getElementById('googleSignUp');
-        
-        // Check if user is already logged in
-        auth.onAuthStateChanged((user) => {
-            if (user) {
-                updateUIForUser(user);
-            } else {
-                updateUIForNoUser();
-            }
-        });
-        
-        // Toggle between forms
-        loginTab.addEventListener('click', () => {
-            loginTab.classList.add('active');
-            signupTab.classList.remove('active');
-            loginForm.classList.add('active');
-            signupForm.classList.remove('active');
-        });
-        
-        signupTab.addEventListener('click', () => {
-            signupTab.classList.add('active');
-            loginTab.classList.remove('active');
-            signupForm.classList.add('active');
-            loginForm.classList.remove('active');
-        });
-        
-        // Show message function
-        function showMessage(message, type) {
-            messageDiv.textContent = message;
-            messageDiv.className = `message ${type}`;
-            messageDiv.style.display = 'block';
-            
-            setTimeout(() => {
-                messageDiv.style.display = 'none';
-            }, 5000);
-        }
-        
-        // Form submission handlers
-        loginForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const email = document.getElementById('loginEmail').value;
-            const password = document.getElementById('loginPassword').value;
-            
-            try {
-                const userCredential = await auth.signInWithEmailAndPassword(email, password);
-                showMessage('Successfully signed in!', 'success');
-            } catch (error) {
-                showMessage(error.message, 'error');
-            }
-        });
-        
-        signupForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const name = document.getElementById('signupName').value;
-            const email = document.getElementById('signupEmail').value;
-            const password = document.getElementById('signupPassword').value;
-            const confirmPassword = document.getElementById('confirmPassword').value;
-            
-            if (password !== confirmPassword) {
-                showMessage('Passwords do not match!', 'error');
-                return;
-            }
-            
-            try {
-                const userCredential = await auth.createUserWithEmailAndPassword(email, password);
-                
-                // Update profile with name
-                await userCredential.user.updateProfile({
-                    displayName: name
-                });
-                
-                showMessage('Signup successful! You are now logged in.', 'success');
-            } catch (error) {
-                showMessage(error.message, 'error');
-            }
-        });
-        
-        // Google Sign In/Sign Up
-        async function handleGoogleAuth() {
-            const provider = new firebase.auth.GoogleAuthProvider();
-            
-            try {
-                const result = await auth.signInWithPopup(provider);
-                // This will automatically trigger the onAuthStateChanged listener
-            } catch (error) {
-                showMessage(error.message, 'error');
-            }
-        }
-        
-        // Update UI for logged in user
-        function updateUIForUser(user) {
-            userName.textContent = user.displayName || user.email;
-            userEmail.textContent = user.email;
-            
-            // Try to get user photo
-            if (user.photoURL) {
-                userImage.src = user.photoURL;
-                userImage.style.display = 'block';
-            } else {
-                userImage.style.display = 'none';
-            }
-            
-            // Switch to user info view
-            loginSection.style.display = 'none';
-            userInfo.style.display = 'block';
-        }
-        
-        // Update UI for no user
-        function updateUIForNoUser() {
-            // Clear form fields
-            loginForm.reset();
-            signupForm.reset();
-            
-            // Switch back to login view
-            userInfo.style.display = 'none';
-            loginSection.style.display = 'block';
-        }
-        
-        // Logout handler
-        logoutBtn.addEventListener('click', async () => {
-            try {
-                await auth.signOut();
-                showMessage('You have been logged out.', 'info');
-            } catch (error) {
-                showMessage(error.message, 'error');
-            }
-        });
-        
-        // Add event listeners for Google buttons
-        googleSignInBtn.addEventListener('click', handleGoogleAuth);
-        googleSignUpBtn.addEventListener('click', handleGoogleAuth);
-        
-        // Show instructions message
-        showMessage('Remember to configure Firebase with your Google OAuth credentials', 'info');
-    </script>
+    <div class="form-container">
+      <div id="message" class="message"></div>
+      <div id="loginSection">
+        <div class="tabs">
+          <div class="tab active" id="loginTab">Sign In</div>
+          <div class="tab" id="signupTab">Sign Up</div>
+        </div>
+
+        <!-- Login Form -->
+        <form id="loginForm" class="form active">
+          <div class="form-control">
+            <label for="loginEmail">Email</label>
+            <input type="email" id="loginEmail" placeholder="Enter your email" required>
+          </div>
+          <div class="form-control">
+            <label for="loginPassword">Password</label>
+            <input type="password" id="loginPassword" placeholder="Enter your password" required>
+          </div>
+          <button type="submit" class="btn">Sign In</button>
+
+          <div class="divider"><span>or</span></div>
+
+          <button type="button" class="google-btn" id="googleSignIn">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg" alt="Google Logo">
+            Sign in with Google
+          </button>
+        </form>
+
+        <!-- Signup Form -->
+        <form id="signupForm" class="form">
+          <div class="form-control">
+            <label for="signupName">Full Name</label>
+            <input type="text" id="signupName" placeholder="Enter your full name" required>
+          </div>
+          <div class="form-control">
+            <label for="signupEmail">Email</label>
+            <input type="email" id="signupEmail" placeholder="Enter your email" required>
+          </div>
+          <div class="form-control">
+            <label for="signupPassword">Password</label>
+            <input type="password" id="signupPassword" placeholder="Create a password" required>
+          </div>
+          <div class="form-control">
+            <label for="confirmPassword">Confirm Password</label>
+            <input type="password" id="confirmPassword" placeholder="Confirm your password" required>
+          </div>
+          <button type="submit" class="btn">Create Account</button>
+
+          <div class="divider"><span>or</span></div>
+
+          <button type="button" class="google-btn" id="googleSignUp">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg" alt="Google Logo">
+            Sign up with Google
+          </button>
+        </form>
+      </div>
+
+      <div id="userInfo" class="user-info">
+        <img id="userImage" src="" alt="User Image">
+        <h3 id="userName"></h3>
+        <p id="userEmail"></p>
+        <button class="logout-btn" id="logoutBtn">Log Out</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Firebase configuration - REPLACE WITH YOUR CONFIG
+    const firebaseConfig = {
+      apiKey: "AIzaSyD2vYzivm2Gbgl_ee0t81d6r5GPHeI4Gqs",
+      authDomain: "quizontal-de977.firebaseapp.com",
+      projectId: "quizontal-de977",
+      storageBucket: "quizontal-de977.appspot.com",
+      messagingSenderId: "123456789",
+      appId: "1:448533191404:web:a9c58dc7c180d0d71fe3c9"
+    };
+
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+
+    // DOM elements
+    const loginForm = document.getElementById('loginForm');
+    const signupForm = document.getElementById('signupForm');
+    const loginTab = document.getElementById('loginTab');
+    const signupTab = document.getElementById('signupTab');
+    const messageDiv = document.getElementById('message');
+    const loginSection = document.getElementById('loginSection');
+    const userInfo = document.getElementById('userInfo');
+    const userName = document.getElementById('userName');
+    const userEmail = document.getElementById('userEmail');
+    const userImage = document.getElementById('userImage');
+    const logoutBtn = document.getElementById('logoutBtn');
+    const googleSignInBtn = document.getElementById('googleSignIn');
+    const googleSignUpBtn = document.getElementById('googleSignUp');
+
+    // Google redirect login
+    async function handleGoogleAuth() {
+      const provider = new firebase.auth.GoogleAuthProvider();
+      try {
+        await auth.signInWithRedirect(provider);
+      } catch (error) {
+        showMessage(error.message, 'error');
+      }
+    }
+
+    // Handle result after redirect
+    auth.getRedirectResult().then((result) => {
+      if (result.user) {
+        updateUIForUser(result.user);
+        showMessage('Successfully signed in with Google!', 'success');
+      }
+    }).catch((error) => {
+      showMessage(error.message, 'error');
+    });
+
+    // Toggle forms
+    loginTab.addEventListener('click', () => {
+      loginTab.classList.add('active');
+      signupTab.classList.remove('active');
+      loginForm.classList.add('active');
+      signupForm.classList.remove('active');
+    });
+
+    signupTab.addEventListener('click', () => {
+      signupTab.classList.add('active');
+      loginTab.classList.remove('active');
+      signupForm.classList.add('active');
+      loginForm.classList.remove('active');
+    });
+
+    // Show messages
+    function showMessage(message, type) {
+      messageDiv.textContent = message;
+      messageDiv.className = `message ${type}`;
+      messageDiv.style.display = 'block';
+      setTimeout(() => { messageDiv.style.display = 'none'; }, 5000);
+    }
+
+    // Auth state change
+    auth.onAuthStateChanged((user) => {
+      if (user) updateUIForUser(user);
+      else updateUIForNoUser();
+    });
+
+    function updateUIForUser(user) {
+      userName.textContent = user.displayName || user.email;
+      userEmail.textContent = user.email;
+      if (user.photoURL) { userImage.src = user.photoURL; userImage.style.display = 'block'; }
+      else userImage.style.display = 'none';
+      loginSection.style.display = 'none';
+      userInfo.style.display = 'block';
+    }
+
+    function updateUIForNoUser() {
+      loginForm.reset();
+      signupForm.reset();
+      userInfo.style.display = 'none';
+      loginSection.style.display = 'block';
+    }
+
+    logoutBtn.addEventListener('click', async () => {
+      try { await auth.signOut(); showMessage('Logged out.', 'info'); }
+      catch (err) { showMessage(err.message, 'error'); }
+    });
+
+    // Email/password login/signup (unchanged)
+    loginForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const email = document.getElementById('loginEmail').value;
+      const password = document.getElementById('loginPassword').value;
+      try { await auth.signInWithEmailAndPassword(email, password); showMessage('Signed in!', 'success'); }
+      catch (err) { showMessage(err.message, 'error'); }
+    });
+
+    signupForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const name = document.getElementById('signupName').value;
+      const email = document.getElementById('signupEmail').value;
+      const password = document.getElementById('signupPassword').value;
+      const confirmPassword = document.getElementById('confirmPassword').value;
+      if (password !== confirmPassword) { showMessage('Passwords do not match!', 'error'); return; }
+      try {
+        const userCredential = await auth.createUserWithEmailAndPassword(email, password);
+        await userCredential.user.updateProfile({ displayName: name });
+        showMessage('Signup successful!', 'success');
+      } catch (err) { showMessage(err.message, 'error'); }
+    });
+
+    // Google buttons
+    googleSignInBtn.addEventListener('click', handleGoogleAuth);
+    googleSignUpBtn.addEventListener('click', handleGoogleAuth);
+
+    showMessage('Remember to configure Firebase with Google OAuth credentials', 'info');
+  </script>
 </body>
 </html>
